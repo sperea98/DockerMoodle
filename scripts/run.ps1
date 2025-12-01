@@ -1,3 +1,9 @@
+
+# Si existe el contenedor lo elimina
+if (docker ps -a --filter "name=ApachePHPContainer" --quiet){
+    docker rm -f ApachePHPContainer
+}
+
 docker run -d `
     --name ApachePHPContainer `
     -p 80:80 `

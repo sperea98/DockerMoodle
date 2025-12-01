@@ -19,7 +19,7 @@ RUN mkdir -p /var/www/${SERVER_NAME} \
 COPY ./docker/http/apache+php/conf.d/*.conf /etc/apache2/conf.d
 # COPY ./docker/http/apache+php/conf/httpd.conf /etc/apache2/conf/httpd.conf
 
-ENTRYPOINT ["http", "-D", "FOREGROUND"]
+ENTRYPOINT ["httpd", "-D", "FOREGROUND"]
 
 
 
