@@ -1,9 +1,25 @@
 FROM alpine:latest
+
+ARG SERVER_NAME=${SERVER_NAME}
+ARG SERVER_PORT=${SERVER_PORT}
+ENV SERVER_NAME=${SERVER_NAME}
+ENV SERVER_PORT=${SERVER_PORT}
+
+EXPOSE ${SERVER_PORT}
+
 RUN apk update && apk upgrade && \
-    apk --no-cache add apache2 php82 php82-apache2 php82-common \
-    php82-curl php82-ctype php82-dom php82-gd php82-iconv php82-intl \
-    php82-mbstring php82-pcre php82-simplexml php82-xml php82-zip \
-    php82-openssl php82-soap php82-sodium php82-tokenizer
+    apk --no-cache add apache2 apache2-utils apache2-proxy php82 php82-apache2 \
+    php-curl php-gd php-mbstring php-intl php-mysqli php-xml php-zip \
+    php-ctype php-dom php-iconv php-simplexml php-openssl php-sodium php-tokenizer
+
+RUN mkdir -p /var/www/${SERVER_NAME} \
+    && chown -R apache:apache /var/www/${SERVER_NAME} \
+    && chmod -R 755 /var/www/${SERVER_NAME}
+
+COPY ./docker/http/apache+php/conf.d/*.conf /etc/apache2/conf.d
+# COPY ./docker/http/apache+php/conf/httpd.conf /etc/apache2/conf/httpd.conf
+
+ENTRYPOINT ["http", "-D", "FOREGROUND"]
 
 
 
